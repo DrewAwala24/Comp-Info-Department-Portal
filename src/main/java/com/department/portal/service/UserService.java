@@ -30,6 +30,11 @@ public class UserService {
             throw new IllegalArgumentException("Email is already registered");
         }
 
+        // Set default role if missing
+        if (user.getRole() == null) {
+            user.setRole(Role.STUDENT);
+        }
+
         // Hash the plain text password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

@@ -31,6 +31,11 @@ public class TimetableService {
         return timetableRepository.findByLecturerId(lecturerId);
     }
 
+    // Renamed to getTimetablesByCourseId to resolve ViewController compiler error
+    public List<Timetable> getTimetablesByCourseId(Long courseId) {
+        return timetableRepository.findByCourseId(courseId);
+    }
+
     public List<Timetable> getTimetableByCourse(Long courseId) {
         return timetableRepository.findByCourseId(courseId);
     }

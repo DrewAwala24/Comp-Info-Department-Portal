@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Portal - Register</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-maroon: #A04856;
+            --primary-hover: #833542;
+            --bg-canvas: #F3F4F8;
+            --surface-card: #FFFFFF;
+            --text-primary: #1E293B;
+            --border-color: #E2E8F0;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+        .portal-card {
+            background-color: var(--surface-card);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 450px;
+        }
+        .portal-title {
+            color: var(--primary-maroon);
+            font-weight: 700;
+            font-size: 1.75rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .portal-subtitle {
+            color: #475569;
+            font-size: 0.875rem;
+            text-align: center;
+            margin-bottom: 1.75rem;
+        }
+        .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-maroon);
+            box-shadow: 0 0 0 0.25rem rgba(160, 72, 86, 0.15);
+        }
+        .btn-maroon {
+            background-color: var(--primary-maroon);
+            color: #FFFFFF;
+            font-weight: 600;
+            border-radius: 6px;
+            border: none;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .btn-maroon:hover {
+            background-color: var(--primary-hover);
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+<div class="portal-card">
+    <h2 class="portal-title">Create Account</h2>
+    <p class="portal-subtitle">Register to join the department portal</p>
+
+    <!-- Display Registration Error Messages -->
+    <div th:if="${param.error}" class="alert alert-danger text-center py-2 fs-6">
+        Registration failed. Username or email may already be taken.
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post">
+        <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" th:field="*{fullName}" class="form-control" placeholder="John Doe" required autofocus>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Admission / Username</label>
+            <input type="text" th:field="*{username}" class="form-control" placeholder="e.g., IT-DCSL/12345678/24" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email Address</label>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="student@portal.ac.ke" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Assign Class</label>
+            <select th:field="*{course}" class="form-select" required>
+                <option value="" disabled selected>-- Select Your Class --</option>
+                <option th:each="c : ${courses}"
+                        th:value="${c.id}"
+                        th:text="${c.courseCode}">
+                    DCS241
+                </option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="form-label">Password</label>
+            <input type="password" th:field="*{password}" class="form-control" placeholder="Create password" required>
+        </div>
+        <button type="submit" class="btn btn-maroon w-100 py-2">Sign Up</button>
+    </form>
+
+    <div class="text-center mt-3 fs-7">
+        Already have an account? <a th:href="@{/login}" style="color: var(--primary-maroon);" class="fw-semibold text-decoration-none">Log In</a>
+    </div>
+</div>
+</body>
+</html>

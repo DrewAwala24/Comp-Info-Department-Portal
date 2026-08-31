@@ -27,18 +27,23 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
+    private Course course;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     public User() {
     }
 
-    public User(String username, String email, String password, String fullName, Role role) {
+    public User(String username, String email, String password, String fullName, Role role, Course course) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
         this.role = role;
+        this.course = course;
     }
 
     @PrePersist
@@ -64,6 +69,9 @@ public class User {
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public Course getCourse() { return course; }
+    public void setCourse(Course course) { this.course = course; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
