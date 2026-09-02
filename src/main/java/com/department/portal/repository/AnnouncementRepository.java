@@ -8,6 +8,10 @@ import java.util.List;
 
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
-    // Fetches announcements for a specific course (e.g. DCS 241) or global broadcasts (null targetCourse)
-    List<Announcement> findByTargetCourseIdOrTargetCourseIsNull(Long courseId);
+
+    // Matches 'targetCourse' property and drills into its 'id'
+    List<Announcement> findByTargetCourse_Id(Long courseId);
+
+    // Matches 'targetCourse' ID OR global broadcasts where targetCourse is null
+    List<Announcement> findByTargetCourse_IdOrTargetCourseIsNull(Long courseId);
 }

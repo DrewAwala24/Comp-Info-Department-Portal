@@ -24,8 +24,16 @@ public class Announcement {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    // Default No-Args Constructor (Required by JPA)
     public Announcement() {}
 
+    // Constructor for Global Broadcasts
+    public Announcement(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    // Constructor for Course-Targeted Announcements
     public Announcement(String title, String content, Course targetCourse) {
         this.title = title;
         this.content = content;
@@ -34,9 +42,12 @@ public class Announcement {
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -51,4 +62,19 @@ public class Announcement {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    // Helper method for Thymeleaf UI rendering
+    public boolean isGlobal() {
+        return this.targetCourse == null;
+    }
+
+    @Override
+    public String toString() {
+        return "Announcement{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", createdAt=" + createdAt +
+                ", isGlobal=" + isGlobal() +
+                '}';
+    }
 }

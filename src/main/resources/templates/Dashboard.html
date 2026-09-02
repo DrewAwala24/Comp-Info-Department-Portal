@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,6 +48,22 @@
             font-size: 0.9rem;
         }
 
+        .btn-maroon {
+            background-color: var(--primary-maroon);
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-maroon:hover {
+            background-color: var(--primary-hover);
+            color: #FFFFFF;
+        }
+
         .btn-outline-maroon {
             border: 1px solid var(--primary-maroon);
             color: var(--primary-maroon);
@@ -54,6 +72,7 @@
             padding: 0.4rem 1rem;
             border-radius: 6px;
             transition: all 0.2s ease-in-out;
+            text-decoration: none;
         }
 
         .btn-outline-maroon:hover {
@@ -67,6 +86,7 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-color);
             overflow: hidden;
+            margin-bottom: 2rem;
         }
 
         .card-header-custom {
@@ -91,6 +111,15 @@
             padding: 0.35rem 0.65rem;
         }
 
+        .badge-global {
+            background-color: #28a745;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
         .table > :not(caption) > * > * {
             padding: 1rem 1.5rem;
             color: var(--text-primary);
@@ -103,14 +132,29 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
+        .announcement-item {
+            border-left: 4px solid var(--primary-maroon);
+            background-color: #FAFAFC;
+            padding: 1.25rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1rem;
+        }
+
+        .announcement-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 <body>
 
+<!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-custom mb-5">
     <div class="container">
         <a class="navbar-brand" href="#">Department Portal</a>
         <div class="d-flex align-items-center gap-3">
+            <a th:href="@{/announcements}" class="btn-outline-maroon">Announcements Bulletin</a>
             <span class="user-badge" th:text="${#authentication.name}">Username</span>
             <a th:href="@{/logout}" class="btn btn-outline-maroon">Logout</a>
         </div>
@@ -120,6 +164,8 @@
 <div class="container mb-5">
     <div class="row">
         <div class="col-12">
+
+            <!-- Department Courses Table -->
             <div class="dashboard-card">
                 <div class="card-header-custom">
                     <h3 class="card-title-custom">Active Department Courses</h3>
@@ -149,6 +195,64 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Publish Announcement Form (RESTRICTED TO ADMIN AND LECTURER) -->
+            <div sec:authorize="hasAnyRole('ADMIN', 'LECTURER')" class="dashboard-card">
+                <div class="card-header-custom">
+                    <h3 class="card-title-custom">Publish New Announcement</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form th:action="@{/announcements}" method="post">
+                        <div class="mb-3">
+                            <label for="title" class="form-label fw-semibold">Title</label>
+                            <input type="text" id="title" name="title" class="form-control" placeholder="Enter announcement title..." required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="content" class="form-label fw-semibold">Content</label>
+                            <textarea id="content" name="content" class="form-control" rows="3" placeholder="Write announcement details..." required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="targetCourse" class="form-label fw-semibold">Target Audience</label>
+                            <select id="targetCourse" name="targetCourse" class="form-select">
+                                <option value="">-- All Students (Global Broadcast) --</option>
+                                <option th:each="course : ${courses}"
+                                        th:value="${course.id}"
+                                        th:text="${course.courseCode + ' - ' + course.courseName}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-maroon">Publish & Send Emails</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Announcements Feed -->
+            <div class="dashboard-card">
+                <div class="card-header-custom d-flex justify-content-between align-items-center">
+                    <h3 class="card-title-custom">Recent Announcements</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div th:if="${#lists.isEmpty(announcements)}" class="text-secondary">
+                        No announcements posted yet.
+                    </div>
+
+                    <div th:each="announcement : ${announcements}" class="announcement-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold mb-0" th:text="${announcement.title}">Title</h5>
+                            <span th:if="${announcement.targetCourse == null}" class="badge-global">Global Broadcast</span>
+                            <span th:if="${announcement.targetCourse != null}" class="badge badge-code" th:text="${announcement.targetCourse.courseCode}">BIT2101</span>
+                        </div>
+                        <p class="mb-2" th:text="${announcement.content}">Announcement text content...</p>
+                        <div class="announcement-meta">
+                            Posted on: <span th:text="${#temporals.format(announcement.createdAt, 'yyyy-MM-dd HH:mm')}">2026-09-02 18:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

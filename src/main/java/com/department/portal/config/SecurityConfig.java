@@ -47,8 +47,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        // Permit public access to login page, registration routes, and static assets
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**", "/api/users/register").permitAll()
+                        // Permit public access to login, registration routes, and static assets
+                        .requestMatchers("/login", "/register", "/api/users/register", "/css/**", "/js/**", "/images/**").permitAll()
 
                         // Role Restrictions
                         .requestMatchers(HttpMethod.POST, "/api/courses/**").hasRole("ADMIN")

@@ -2,6 +2,7 @@ package com.department.portal.controller;
 
 import com.department.portal.model.Course;
 import com.department.portal.model.User;
+import com.department.portal.service.AnnouncementService;
 import com.department.portal.service.CourseService;
 import com.department.portal.service.TimetableService;
 import com.department.portal.service.UserService;
@@ -19,11 +20,16 @@ public class ViewController {
     private final CourseService courseService;
     private final TimetableService timetableService;
     private final UserService userService;
+    private final AnnouncementService announcementService;
 
-    public ViewController(CourseService courseService, TimetableService timetableService, UserService userService) {
+    public ViewController(CourseService courseService,
+                          TimetableService timetableService,
+                          UserService userService,
+                          AnnouncementService announcementService) {
         this.courseService = courseService;
         this.timetableService = timetableService;
         this.userService = userService;
+        this.announcementService = announcementService;
     }
 
     @GetMapping("/")
@@ -59,11 +65,19 @@ public class ViewController {
                 Long courseId = currentUser.getCourse().getId();
                 model.addAttribute("userCourse", currentUser.getCourse());
                 model.addAttribute("timetables", timetableService.getTimetablesByCourseId(courseId));
+                // Target course announcements for students enrolled in a specific course
+                model.addAttribute("announcements", announcementService.getAnnouncementsForCourse(courseId));
             } else {
                 model.addAttribute("courses", courseService.getAllCourses());
                 model.addAttribute("timetables", timetableService.getAllTimetables());
+                // Global announcements feed for Admins / Lecturers / Unassigned users
+                model.addAttribute("announcements", announcementService.getAllAnnouncements());
             }
+        } else {
+            model.addAttribute("courses", courseService.getAllCourses());
+            model.addAttribute("announcements", announcementService.getAllAnnouncements());
         }
+
         return "dashboard";
     }
 }

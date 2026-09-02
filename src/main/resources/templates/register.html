@@ -83,8 +83,9 @@
     <h2 class="portal-title">Create Account</h2>
     <p class="portal-subtitle">Register to join the department portal</p>
 
-    <!-- Display Registration Error Messages -->
-    <div th:if="${param.error}" class="alert alert-danger text-center py-2 fs-6">
+    <!-- Display Specific Exception Error Message or Generic Fallback -->
+    <div th:if="${param.error}" class="alert alert-danger text-center py-2 fs-6"
+         th:text="${param.error[0] != null and !#strings.isEmpty(param.error[0])} ? ${param.error[0]} : 'Registration failed. Username or email may already be taken.'">
         Registration failed. Username or email may already be taken.
     </div>
 
@@ -101,7 +102,7 @@
             <label class="form-label">Email Address</label>
             <input type="email" th:field="*{email}" class="form-control" placeholder="student@portal.ac.ke" required>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" th:if="${courses != null and !#lists.isEmpty(courses)}">
             <label class="form-label">Assign Class</label>
             <select th:field="*{course}" class="form-select" required>
                 <option value="" disabled selected>-- Select Your Class --</option>
