@@ -9,4 +9,7 @@ import java.util.List;
 @Repository
 public interface UnitRepository extends JpaRepository<Unit, Long> {
     List<Unit> findByCourseId(Long courseId);
+    List<Unit> findByLecturerId(Long lecturerId);
+    List<Unit> findAllByOrderByUnitCodeAsc();
+    boolean existsByUnitCode(String unitCode);
 }

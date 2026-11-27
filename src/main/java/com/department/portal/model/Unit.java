@@ -1,42 +1,59 @@
 package com.department.portal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
 @Table(name = "units")
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "unit_code", nullable = false, unique = true)
-    private String unitCode; // e.g., "DCS 2401"
+    @Column(name = "unit_code", nullable = false, unique = true, length = 20)
+    @NotBlank(message = "Unit code is required")
+    private String unitCode;
 
-    @Column(name = "unit_name", nullable = false)
-    private String unitName; // e.g., "Object Oriented Programming in Java"
+    @Column(name = "unit_name", nullable = false, length = 150)
+    @NotBlank(message = "Unit name is required")
+    private String unitName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", nullable = false)
+    @NotNull(message = "Course is required")
     private Course course;
 
-    public Unit() {}
+    /** Assigned lecturer (ROLE_LECTURER) */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "lecturer_id")
+    private User lecturer;
 
-    public Unit(String unitCode, String unitName, Course course) {
-        this.unitCode = unitCode;
-        this.unitName = unitName;
-        this.course = course;
+    @Column(name = "theory_hours", nullable = false)
+    @Min(value = 0, message = "Theory hours cannot be negative")
+    @Builder.Default
+    private Integer theoryHours = 30;
+
+    @Column(name = "practical_hours", nullable = false)
+    @Min(value = 0, message = "Practical hours cannot be negative")
+    @Builder.Default
+    private Integer practicalHours = 30;
+
+    public int getTotalHours() {
+        int t = theoryHours != null ? theoryHours : 0;
+        int p = practicalHours != null ? practicalHours : 0;
+        return t + p;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getUnitCode() { return unitCode; }
-    public void setUnitCode(String unitCode) { this.unitCode = unitCode; }
-
-    public String getUnitName() { return unitName; }
-    public void setUnitName(String unitName) { this.unitName = unitName; }
-
-    public Course getCourse() { return course; }
-    public void setCourse(Course course) { this.course = course; }
+    @Override
+    public String toString() {
+        return unitCode + " – " + unitName;
+    }
 }

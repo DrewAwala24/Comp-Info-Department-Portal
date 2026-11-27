@@ -3,6 +3,8 @@ package com.department.portal.repository;
 import com.department.portal.model.Role;
 import com.department.portal.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +20,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Fetch all students enrolled in a specific class/course for automated email alerts
     List<User> findByCourseId(Long courseId);
+
+    List<User> findAllByOrderByFullNameAsc();
+
+    @Query("SELECT u FROM User u WHERE " +
+           "LOWER(u.username) LIKE LOWER(CONCAT('%', :kw, '%')) OR " +
+           "LOWER(u.fullName) LIKE LOWER(CONCAT('%', :kw, '%')) OR " +
+           "LOWER(u.email) LIKE LOWER(CONCAT('%', :kw, '%')) " +
+           "ORDER BY u.fullName ASC")
+    List<User> searchByKeyword(@Param("kw") String keyword);
 }

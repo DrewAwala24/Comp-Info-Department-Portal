@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOD Panel – TVET Programs &amp; Intakes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root { --primary:#A04856; --primary-h:#833542; --bg:#F3F4F8; --card:#FFFFFF; --txt:#1E293B; --txt2:#475569; --border:#E2E8F0; }
+        body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--txt); }
+        .icofont-svg { vertical-align: -0.16em; display: inline-block; }
+        .navbar-custom { background:var(--card); border-bottom:1px solid var(--border); box-shadow:0 2px 10px rgba(0,0,0,.04); }
+        .navbar-brand   { color:var(--primary)!important; font-weight:700; }
+        .btn-maroon     { background:var(--primary); color:#fff; font-weight:600; font-size:.85rem; border:none; border-radius:6px; padding:.5rem 1.15rem; }
+        .btn-maroon:hover { background:var(--primary-h); color:#fff; }
+        .btn-outline-maroon { border:1px solid var(--primary); color:var(--primary); font-weight:600; font-size:.82rem; border-radius:6px; padding:.38rem .9rem; text-decoration:none; }
+        .btn-outline-maroon:hover, .btn-outline-maroon.active { background:var(--primary); color:#fff; }
+        .dash-card { background:var(--card); border-radius:10px; border:1px solid var(--border); box-shadow:0 8px 24px rgba(0,0,0,.05); margin-bottom:2rem; overflow:hidden; }
+        .dash-card-header { background:var(--card); border-bottom:1px solid var(--border); padding:1.1rem 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.75rem; }
+        .dash-card-title { color:var(--primary); font-weight:700; font-size:1.05rem; margin:0; }
+        .badge-code { background:#F8FAFC; color:var(--primary); border:1px solid var(--border); font-weight:600; font-size:.78rem; padding:.3rem .6rem; border-radius:4px; }
+        .badge-level { background:#EEF2FF; color:#4338CA; font-weight:600; font-size:.75rem; padding:.28rem .55rem; border-radius:4px; }
+        th { font-weight:600; font-size:.78rem; color:var(--txt2); text-transform:uppercase; letter-spacing:.5px; }
+        .form-control:focus, .form-select:focus { border-color:var(--primary); box-shadow:0 0 0 .2rem rgba(160,72,86,.15); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-custom mb-4">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <th:block th:replace="~{fragments/icons :: icon('icofont-education')}" />
+            <span class="ms-1">Kitale Polytechnic · Comp &amp; Info</span>
+        </a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <a th:href="@{/dashboard}" class="btn-outline-maroon"><th:block th:replace="~{fragments/icons :: icon('icofont-dashboard-web')}" /> <span class="ms-1">Dashboard</span></a>
+            <a th:href="@{/admin/courses}" class="btn-outline-maroon active"><th:block th:replace="~{fragments/icons :: icon('icofont-book-alt')}" /> <span class="ms-1">Programs</span></a>
+            <a th:href="@{/admin/units}" class="btn-outline-maroon"><th:block th:replace="~{fragments/icons :: icon('icofont-layers')}" /> <span class="ms-1">Units</span></a>
+            <a th:href="@{/admin/users}" class="btn-outline-maroon"><th:block th:replace="~{fragments/icons :: icon('icofont-users-alt-5')}" /> <span class="ms-1">Users</span></a>
+            <a th:href="@{/logout}" class="btn-outline-maroon"><th:block th:replace="~{fragments/icons :: icon('icofont-logout')}" /> <span class="ms-1">Logout</span></a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mb-5">
+
+    <div th:if="${successMsg}" class="alert alert-success alert-dismissible fade show">
+        <th:block th:replace="~{fragments/icons :: icon('icofont-check-circled')}" /> <span class="ms-1" th:text="${successMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${errorMsg}" class="alert alert-danger alert-dismissible fade show">
+        <th:block th:replace="~{fragments/icons :: icon('icofont-warning-alt')}" /> <span class="ms-1" th:text="${errorMsg}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title"><th:block th:replace="~{fragments/icons :: icon('icofont-plus-circle')}" /> <span class="ms-1">Register TVET Program / Intake Cohort</span></h3>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/admin/courses}" th:object="${newCourse}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Course Code</label>
+                        <input type="text" th:field="*{courseCode}" class="form-control" placeholder="e.g. ICT25J" required>
+                    </div>
+                    <div class="col-md-5">
+                        <label class="form-label fw-semibold small">Program Title</label>
+                        <input type="text" th:field="*{courseName}" class="form-control" placeholder="e.g. Diploma in Information Communication Technology" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">TVET Level</label>
+                        <select th:field="*{tvetLevel}" class="form-select" required>
+                            <option th:each="lvl : ${tvetLevels}" th:value="${lvl}" th:text="${lvl.displayName}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Intake Cohort</label>
+                        <input type="text" th:field="*{intakeCohort}" class="form-control" placeholder="e.g. DCS-24S / ICT-25J">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold small">Year / Stage</label>
+                        <input type="number" th:field="*{yearOfStudy}" class="form-control" min="1" max="6" value="1">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold small">Term / Semester</label>
+                        <input type="text" th:field="*{semester}" class="form-control" placeholder="e.g. Term 1">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold small">Description</label>
+                        <input type="text" th:field="*{description}" class="form-control" placeholder="Brief curriculum summary...">
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-maroon"><th:block th:replace="~{fragments/icons :: icon('icofont-save')}" /> <span class="ms-1">Save Program</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title"><th:block th:replace="~{fragments/icons :: icon('icofont-book-alt')}" /> <span class="ms-1">Department TVET Programs</span></h3>
+            <form method="get" th:action="@{/admin/courses}" class="d-flex gap-2 align-items-center">
+                <select name="level" class="form-select form-select-sm" onchange="this.form.submit()">
+                    <option value="">All TVET Levels</option>
+                    <option th:each="lvl : ${tvetLevels}" th:value="${lvl}" th:text="${lvl.displayName}" th:selected="${selectedLevel == lvl}"></option>
+                </select>
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>Code</th>
+                    <th>Program Title</th>
+                    <th>TVET Level</th>
+                    <th>Intake Cohort</th>
+                    <th>Stage / Term</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(courses)}">
+                    <td colspan="6" class="text-center py-4 text-secondary">No programs found.</td>
+                </tr>
+                <tr th:each="c : ${courses}">
+                    <td><span class="badge-code" th:text="${c.courseCode}">DCS241</span></td>
+                    <td>
+                        <div class="fw-semibold" th:text="${c.courseName}">Course Name</div>
+                        <small class="text-secondary" th:text="${c.description}"></small>
+                    </td>
+                    <td><span class="badge-level" th:text="${c.tvetLevel.displayName}">Diploma (Level 6)</span></td>
+                    <td class="fw-semibold" th:text="${c.intakeCohort != null ? c.intakeCohort : '—'}">DCS-24S</td>
+                    <td th:text="${(c.yearOfStudy != null ? 'Yr ' + c.yearOfStudy : '') + (c.semester != null ? ' · ' + c.semester : '')}">Yr 2</td>
+                    <td class="text-end">
+                        <a th:href="@{'/admin/units?courseId=' + ${c.id}}" class="btn btn-sm btn-outline-secondary me-1" title="Manage Units">
+                            <th:block th:replace="~{fragments/icons :: icon('icofont-layers')}" />
+                        </a>
+                        <form th:action="@{'/admin/courses/' + ${c.id} + '/delete'}" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this program and its associated units?');">
+                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <th:block th:replace="~{fragments/icons :: icon('icofont-trash')}" />
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -80,6 +80,9 @@
 </head>
 <body>
 <div class="portal-card">
+    <div class="text-center mb-2" style="color: var(--primary-maroon); font-size: 2rem;">
+        <th:block th:replace="~{fragments/icons :: icon('icofont-education')}" />
+    </div>
     <h2 class="portal-title">Create Account</h2>
     <p class="portal-subtitle">Register to join the department portal</p>
 
@@ -108,7 +111,7 @@
                 <option value="" disabled selected>-- Select Your Class --</option>
                 <option th:each="c : ${courses}"
                         th:value="${c.id}"
-                        th:text="${c.courseCode}">
+                        th:text="${c.courseCode + ' – ' + c.courseName + (c.intakeCohort != null ? ' (' + c.intakeCohort + ')' : '')}">
                     DCS241
                 </option>
             </select>
@@ -117,7 +120,10 @@
             <label class="form-label">Password</label>
             <input type="password" th:field="*{password}" class="form-control" placeholder="Create password" required>
         </div>
-        <button type="submit" class="btn btn-maroon w-100 py-2">Sign Up</button>
+        <button type="submit" class="btn btn-maroon w-100 py-2">
+            <th:block th:replace="~{fragments/icons :: icon('icofont-user-alt-3')}" />
+            <span class="ms-1">Sign Up</span>
+        </button>
     </form>
 
     <div class="text-center mt-3 fs-7">

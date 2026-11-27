@@ -1,87 +1,55 @@
 package com.department.portal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity
 @Table(name = "courses")
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "course_code", nullable = false, unique = true)
+    @Column(name = "course_code", nullable = false, unique = true, length = 20)
+    @NotBlank(message = "Course code is required")
     private String courseCode;
 
-    @Column(name = "course_name", nullable = false)
+    @Column(name = "course_name", nullable = false, length = 150)
+    @NotBlank(message = "Course name is required")
     private String courseName;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "year_of_study")
+    @Min(value = 1, message = "Year of study must be at least 1")
+    @Max(value = 6, message = "Year of study must be at most 6")
     private Integer yearOfStudy;
 
+    @Column(length = 20)
     private String semester;
 
-    public Course() {
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tvet_level", nullable = false, length = 30)
+    @NotNull(message = "TVET level is required")
+    @Builder.Default
+    private TvetLevel tvetLevel = TvetLevel.LEVEL_6_DIPLOMA;
 
-    public Course(String courseCode, String courseName, String description, Integer yearOfStudy, String semester) {
-        this.courseCode = courseCode;
-        this.courseName = courseName;
-        this.description = description;
-        this.yearOfStudy = yearOfStudy;
-        this.semester = semester;
-    }
+    /** Intake cohort code, e.g., DCS-24S, ICT-25J */
+    @Column(name = "intake_cohort", length = 40)
+    private String intakeCohort;
 
-    // --- Getters and Setters ---
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getYearOfStudy() {
-        return yearOfStudy;
-    }
-
-    public void setYearOfStudy(Integer yearOfStudy) {
-        this.yearOfStudy = yearOfStudy;
-    }
-
-    public String getSemester() {
-        return semester;
-    }
-
-    public void setSemester(String semester) {
-        this.semester = semester;
+    @Override
+    public String toString() {
+        return courseCode + " – " + courseName;
     }
 }

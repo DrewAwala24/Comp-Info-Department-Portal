@@ -9,9 +9,12 @@ import java.util.List;
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
 
-    // Matches 'targetCourse' property and drills into its 'id'
+    /** All announcements ordered newest-first */
+    List<Announcement> findAllByOrderByCreatedAtDesc();
+
+    /** Course-specific announcements */
     List<Announcement> findByTargetCourse_Id(Long courseId);
 
-    // Matches 'targetCourse' ID OR global broadcasts where targetCourse is null
-    List<Announcement> findByTargetCourse_IdOrTargetCourseIsNull(Long courseId);
+    /** Student feed: course-targeted OR global (targetCourse IS NULL), newest-first */
+    List<Announcement> findByTargetCourse_IdOrTargetCourseIsNullOrderByCreatedAtDesc(Long courseId);
 }

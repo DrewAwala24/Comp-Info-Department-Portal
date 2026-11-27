@@ -1,30 +1,20 @@
 package com.department.portal;
 
-import com.department.portal.service.EmailService;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+/**
+ * Entry point for the Comp & Information Science Department Portal.
+ * <p>
+ * {@code @EnableAsync} allows the {@link com.department.portal.service.EmailService}
+ * to dispatch notification emails on a separate thread without blocking web requests.
+ */
 @SpringBootApplication
 @EnableAsync
 public class DepartmentSystemApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DepartmentSystemApplication.class, args);
-    }
-
-    // Temporary test on application startup to verify Mailtrap integration
-    @Bean
-    public CommandLineRunner testEmail(EmailService emailService) {
-        return args -> {
-            System.out.println(">>> Testing Mailtrap connection...");
-            emailService.sendNotificationEmail(
-                    "testuser@portal.ac.ke",
-                    "Test Subject",
-                    "If you see this, Mailtrap and EmailService are working!"
-            );
-        };
     }
 }

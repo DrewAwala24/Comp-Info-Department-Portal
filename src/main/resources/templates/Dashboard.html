@@ -5,257 +5,274 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Department Portal - Dashboard</title>
-    <!-- Montserrat Google Font -->
+    <title>Department Portal – Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         :root {
-            --primary-maroon: #A04856;
-            --primary-hover: #833542;
-            --bg-canvas: #F3F4F8;
-            --surface-card: #FFFFFF;
-            --text-primary: #1E293B;
-            --text-secondary: #475569;
-            --border-color: #E2E8F0;
+            --primary:   #A04856;
+            --primary-h: #833542;
+            --bg:        #F3F4F8;
+            --card:      #FFFFFF;
+            --txt:       #1E293B;
+            --txt2:      #475569;
+            --border:    #E2E8F0;
         }
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--txt); }
+        .icofont-svg { vertical-align: -0.16em; display: inline-block; }
 
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-canvas);
-            color: var(--text-primary);
-        }
+        /* ── Navbar ── */
+        .navbar-custom { background: var(--card); border-bottom: 1px solid var(--border); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+        .navbar-brand   { color: var(--primary) !important; font-weight: 700; font-size: 1.15rem; }
+        .nav-username   { font-weight: 600; font-size: .88rem; color: var(--txt2); }
 
-        .navbar-custom {
-            background-color: var(--surface-card);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-        }
+        /* ── Buttons ── */
+        .btn-maroon         { background: var(--primary); color: #fff; font-weight: 600; font-size: .85rem; border: none; border-radius: 6px; padding: .5rem 1.25rem; transition: background .2s; }
+        .btn-maroon:hover   { background: var(--primary-h); color: #fff; }
+        .btn-outline-maroon { border: 1px solid var(--primary); color: var(--primary); font-weight: 600; font-size: .82rem; border-radius: 6px; padding: .38rem .9rem; text-decoration: none; transition: all .2s; }
+        .btn-outline-maroon:hover { background: var(--primary); color: #fff; }
 
-        .navbar-brand {
-            color: var(--primary-maroon) !important;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
+        /* ── Cards ── */
+        .dash-card { background: var(--card); border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,.05); margin-bottom: 2rem; overflow: hidden; }
+        .dash-card-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 1.1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .dash-card-title  { color: var(--primary); font-weight: 700; font-size: 1.05rem; margin: 0; }
 
-        .user-badge {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-        }
+        /* ── Table ── */
+        .table > :not(caption) > * > * { padding: .9rem 1.4rem; color: var(--txt); }
+        th { font-weight: 600; font-size: .8rem; color: var(--txt2); text-transform: uppercase; letter-spacing: .5px; }
 
-        .btn-maroon {
-            background-color: var(--primary-maroon);
-            color: #FFFFFF;
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.5rem 1.25rem;
-            border-radius: 6px;
-            border: none;
-            transition: all 0.2s ease-in-out;
-        }
+        /* ── Badges ── */
+        .badge-code   { background: #F8FAFC; color: var(--primary); border: 1px solid var(--border); font-weight: 600; font-size: .78rem; padding: .3rem .6rem; border-radius: 4px; }
+        .badge-global { background: #22c55e; color: #fff; font-weight: 600; font-size: .72rem; padding: .2rem .5rem; border-radius: 4px; }
+        .badge-role-admin    { background: #6366f1; color: #fff; font-size: .72rem; padding: .2rem .55rem; border-radius: 4px; }
+        .badge-role-lecturer { background: #0ea5e9; color: #fff; font-size: .72rem; padding: .2rem .55rem; border-radius: 4px; }
+        .badge-role-student  { background: #64748b; color: #fff; font-size: .72rem; padding: .2rem .55rem; border-radius: 4px; }
 
-        .btn-maroon:hover {
-            background-color: var(--primary-hover);
-            color: #FFFFFF;
-        }
+        /* ── Announcements ── */
+        .ann-item { border-left: 4px solid var(--primary); background: #FAFAFC; padding: 1.1rem 1.25rem; border-radius: 0 8px 8px 0; margin-bottom: 1rem; }
+        .ann-meta { font-size: .78rem; color: var(--txt2); margin-top: .4rem; }
 
-        .btn-outline-maroon {
-            border: 1px solid var(--primary-maroon);
-            color: var(--primary-maroon);
-            font-weight: 600;
-            font-size: 0.85rem;
-            padding: 0.4rem 1rem;
-            border-radius: 6px;
-            transition: all 0.2s ease-in-out;
-            text-decoration: none;
-        }
-
-        .btn-outline-maroon:hover {
-            background-color: var(--primary-maroon);
-            color: #FFFFFF;
-        }
-
-        .dashboard-card {
-            background-color: var(--surface-card);
-            border-radius: 10px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-            overflow: hidden;
-            margin-bottom: 2rem;
-        }
-
-        .card-header-custom {
-            background-color: var(--surface-card);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1.25rem 1.5rem;
-        }
-
-        .card-title-custom {
-            color: var(--primary-maroon);
-            font-weight: 700;
-            font-size: 1.15rem;
-            margin: 0;
-        }
-
-        .badge-code {
-            background-color: #F8FAFC;
-            color: var(--primary-maroon);
-            border: 1px solid var(--border-color);
-            font-weight: 600;
-            font-size: 0.8rem;
-            padding: 0.35rem 0.65rem;
-        }
-
-        .badge-global {
-            background-color: #28a745;
-            color: #ffffff;
-            font-weight: 600;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-        }
-
-        .table > :not(caption) > * > * {
-            padding: 1rem 1.5rem;
-            color: var(--text-primary);
-        }
-
-        th {
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .announcement-item {
-            border-left: 4px solid var(--primary-maroon);
-            background-color: #FAFAFC;
-            padding: 1.25rem;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 1rem;
-        }
-
-        .announcement-meta {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
+        /* ── Empty state ── */
+        .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--txt2); }
+        .empty-state svg { width: 2.5rem; height: 2.5rem; margin-bottom: .75rem; opacity: .4; }
     </style>
 </head>
 <body>
 
-<!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-custom mb-5">
     <div class="container">
-        <a class="navbar-brand" href="#">Department Portal</a>
-        <div class="d-flex align-items-center gap-3">
-            <a th:href="@{/announcements}" class="btn-outline-maroon">Announcements Bulletin</a>
-            <span class="user-badge" th:text="${#authentication.name}">Username</span>
-            <a th:href="@{/logout}" class="btn btn-outline-maroon">Logout</a>
+        <a class="navbar-brand" th:href="@{/dashboard}">
+            <th:block th:replace="~{fragments/icons :: icon('icofont-education')}" />
+            <span class="ms-1">Department Portal</span>
+        </a>
+        <div class="d-flex align-items-center gap-2 flex-wrap">
+            <span th:if="${currentUser != null}">
+                <span th:if="${currentUser.role.name() == 'ADMIN'}"    class="badge-role-admin">ADMIN</span>
+                <span th:if="${currentUser.role.name() == 'LECTURER'}" class="badge-role-lecturer">LECTURER</span>
+                <span th:if="${currentUser.role.name() == 'STUDENT'}"  class="badge-role-student">STUDENT</span>
+            </span>
+            <a th:href="@{/announcements}" class="btn-outline-maroon">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-bullhorn')}" />
+                <span class="ms-1">Bulletin</span>
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/courses}" class="btn-outline-maroon">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-book-alt')}" />
+                <span class="ms-1">Programs</span>
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/units}" class="btn-outline-maroon">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-layers')}" />
+                <span class="ms-1">Units</span>
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}" class="btn-outline-maroon">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-users-alt-5')}" />
+                <span class="ms-1">Users</span>
+            </a>
+            <span class="nav-username ms-1">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-user-alt-3')}" />
+                <span th:text="${#authentication.name}">Username</span>
+            </span>
+            <a th:href="@{/logout}" class="btn btn-outline-maroon">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-logout')}" />
+                <span class="ms-1">Logout</span>
+            </a>
         </div>
     </div>
 </nav>
 
 <div class="container mb-5">
-    <div class="row">
-        <div class="col-12">
 
-            <!-- Department Courses Table -->
-            <div class="dashboard-card">
-                <div class="card-header-custom">
-                    <h3 class="card-title-custom">Active Department Courses</h3>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead>
-                            <tr>
-                                <th>Code</th>
-                                <th>Course Title</th>
-                                <th>Year</th>
-                                <th>Semester</th>
-                                <th>Description</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="course : ${courses}">
-                                <td><span class="badge badge-code" th:text="${course.courseCode}">BIT2101</span></td>
-                                <td class="fw-semibold" th:text="${course.courseName}">Database Management Systems</td>
-                                <td th:text="${course.yearOfStudy}">2</td>
-                                <td th:text="${course.semester}">Semester 1</td>
-                                <td class="text-secondary" th:text="${course.description}">Description content...</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+    <div th:if="${currentUser != null}" class="alert alert-light border mb-4 py-3 px-4"
+         style="border-radius:10px; border-color: var(--border)!important;">
+        <span class="fw-semibold" th:text="'Welcome back, ' + ${currentUser.fullName} + '!'">Welcome back!</span>
+        <span class="text-secondary ms-2" th:if="${userCourse != null}"
+              th:text="'| ' + ${userCourse.courseName}"></span>
+    </div>
+
+    <!-- Courses Table -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-book-alt')}" />
+                <span class="ms-2">Department Courses</span>
+            </h3>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/courses}" class="btn-outline-maroon" style="font-size:.8rem;">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-edit')}" />
+                <span class="ms-1">Manage Programs</span>
+            </a>
+        </div>
+        <div class="card-body p-0">
+            <div th:if="${courses == null or #lists.isEmpty(courses)}" class="empty-state">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-book-alt')}" />
+                <div>No courses found.</div>
             </div>
-
-            <!-- Publish Announcement Form (RESTRICTED TO ADMIN AND LECTURER) -->
-            <div sec:authorize="hasAnyRole('ADMIN', 'LECTURER')" class="dashboard-card">
-                <div class="card-header-custom">
-                    <h3 class="card-title-custom">Publish New Announcement</h3>
-                </div>
-                <div class="card-body p-4">
-                    <form th:action="@{/announcements}" method="post">
-                        <div class="mb-3">
-                            <label for="title" class="form-label fw-semibold">Title</label>
-                            <input type="text" id="title" name="title" class="form-control" placeholder="Enter announcement title..." required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="content" class="form-label fw-semibold">Content</label>
-                            <textarea id="content" name="content" class="form-control" rows="3" placeholder="Write announcement details..." required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="targetCourse" class="form-label fw-semibold">Target Audience</label>
-                            <select id="targetCourse" name="targetCourse" class="form-select">
-                                <option value="">-- All Students (Global Broadcast) --</option>
-                                <option th:each="course : ${courses}"
-                                        th:value="${course.id}"
-                                        th:text="${course.courseCode + ' - ' + course.courseName}">
-                                </option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-maroon">Publish & Send Emails</button>
-                    </form>
-                </div>
+            <div class="table-responsive" th:if="${courses != null and !#lists.isEmpty(courses)}">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Course Title</th>
+                        <th>TVET Level</th>
+                        <th>Cohort</th>
+                        <th>Stage / Term</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="course : ${courses}">
+                        <td><span class="badge-code" th:text="${course.courseCode}">DCS241</span></td>
+                        <td>
+                            <div class="fw-semibold" th:text="${course.courseName}">Course Name</div>
+                            <small class="text-secondary" th:text="${course.description}">—</small>
+                        </td>
+                        <td th:text="${course.tvetLevel != null ? course.tvetLevel.displayName : 'Diploma (Level 6)'}">Diploma (Level 6)</td>
+                        <td th:text="${course.intakeCohort != null ? course.intakeCohort : '—'}">DCS-24S</td>
+                        <td th:text="${(course.yearOfStudy != null ? 'Yr ' + course.yearOfStudy : '') + (course.semester != null ? ' · ' + course.semester : '')}">Yr 2 · Semester 1</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Announcements Feed -->
-            <div class="dashboard-card">
-                <div class="card-header-custom d-flex justify-content-between align-items-center">
-                    <h3 class="card-title-custom">Recent Announcements</h3>
-                </div>
-                <div class="card-body p-4">
-                    <div th:if="${#lists.isEmpty(announcements)}" class="text-secondary">
-                        No announcements posted yet.
-                    </div>
-
-                    <div th:each="announcement : ${announcements}" class="announcement-item">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h5 class="fw-bold mb-0" th:text="${announcement.title}">Title</h5>
-                            <span th:if="${announcement.targetCourse == null}" class="badge-global">Global Broadcast</span>
-                            <span th:if="${announcement.targetCourse != null}" class="badge badge-code" th:text="${announcement.targetCourse.courseCode}">BIT2101</span>
-                        </div>
-                        <p class="mb-2" th:text="${announcement.content}">Announcement text content...</p>
-                        <div class="announcement-meta">
-                            Posted on: <span th:text="${#temporals.format(announcement.createdAt, 'yyyy-MM-dd HH:mm')}">2026-09-02 18:00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
+
+    <!-- Timetable -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-ui-calendar')}" />
+                <span class="ms-2">Class Timetable</span>
+            </h3>
+        </div>
+        <div class="card-body p-0">
+            <div th:if="${timetables == null or #lists.isEmpty(timetables)}" class="empty-state">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-ui-calendar')}" />
+                <div>No timetable entries yet.</div>
+            </div>
+            <div class="table-responsive" th:if="${timetables != null and !#lists.isEmpty(timetables)}">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Course</th>
+                        <th>Unit</th>
+                        <th>Lecturer</th>
+                        <th>Venue</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="t : ${timetables}">
+                        <td class="fw-semibold" th:text="${t.dayOfWeek}">MONDAY</td>
+                        <td th:text="${#temporals.format(t.startTime, 'HH:mm')}">08:00</td>
+                        <td th:text="${#temporals.format(t.endTime, 'HH:mm')}">10:00</td>
+                        <td><span class="badge-code" th:text="${t.course.courseCode}">DCS241</span></td>
+                        <td th:text="${t.unit != null ? t.unit.unitName : '—'}">—</td>
+                        <td th:text="${t.lecturer.fullName}">Lecturer Name</td>
+                        <td th:text="${t.venueHall}">Lab 3</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publish Announcement (Admin / Lecturer only) -->
+    <div sec:authorize="hasAnyRole('ADMIN', 'LECTURER')" class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-bullhorn')}" />
+                <span class="ms-2">Publish Announcement</span>
+            </h3>
+        </div>
+        <div class="card-body p-4">
+            <form th:action="@{/announcements}" method="post">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <label class="form-label fw-semibold">Title</label>
+                        <input type="text" name="title" class="form-control" placeholder="Announcement title…" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Target Audience</label>
+                        <select name="targetCourseId" class="form-select">
+                            <option value="">— All Students (Global) —</option>
+                            <option th:each="c : ${courses}"
+                                    th:value="${c.id}"
+                                    th:text="${c.courseCode + ' – ' + c.courseName}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Content</label>
+                        <textarea name="content" class="form-control" rows="3" placeholder="Write announcement details…" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-maroon">
+                            <th:block th:replace="~{fragments/icons :: icon('icofont-paper-plane')}" />
+                            <span class="ms-1">Publish &amp; Notify</span>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Announcements Feed -->
+    <div class="dash-card">
+        <div class="dash-card-header">
+            <h3 class="dash-card-title">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-notification')}" />
+                <span class="ms-2">Recent Announcements</span>
+            </h3>
+            <a th:href="@{/announcements}" class="btn-outline-maroon" style="font-size:.8rem;">View All</a>
+        </div>
+        <div class="card-body p-4">
+            <div th:if="${announcements == null or #lists.isEmpty(announcements)}" class="empty-state">
+                <th:block th:replace="~{fragments/icons :: icon('icofont-notification')}" />
+                <div>No announcements posted yet.</div>
+            </div>
+            <div th:each="a : ${announcements}" class="ann-item">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <h6 class="fw-bold mb-0" th:text="${a.title}">Title</h6>
+                    <span th:if="${a.targetCourse == null}" class="badge-global">Global</span>
+                    <span th:if="${a.targetCourse != null}" class="badge-code" th:text="${a.targetCourse.courseCode}">DCS241</span>
+                </div>
+                <p class="mb-1 small" th:text="${a.content}">Content…</p>
+                <div class="ann-meta">
+                    <th:block th:replace="~{fragments/icons :: icon('icofont-clock-time')}" />
+                    <span th:text="${#temporals.format(a.createdAt, 'dd MMM yyyy, HH:mm')}">01 Jan 2026 09:00</span>
+                    <span th:if="${a.author != null}"> ·
+                        <th:block th:replace="~{fragments/icons :: icon('icofont-user-alt-3')}" />
+                        <span th:text="${a.author.fullName}">Author</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
